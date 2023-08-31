@@ -6,7 +6,7 @@ export default function Home() {
         <p>about</p>
       </header>
       <div>
-        <h1>midpoint</h1>
+        <h1>midpoint!</h1>
       </div>
     </main>
   )
