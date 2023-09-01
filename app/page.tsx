@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import getCoordsFromZip from "./zipCodeConnection";
 
 export default function Home() {
-  const [firstLocation, setFirstLocation] = useState<number>();
-  const [secondLocation, setSecondLocation] = useState<number>();
+  const [firstLocation, setFirstLocation] = useState<number>(0);
+  const [secondLocation, setSecondLocation] = useState<number>(0);
   const [firstInputValue, setFirstInputValue] = useState('');
   const [secondInputValue, setSecondInputValue] = useState('');
 
@@ -29,7 +30,7 @@ export default function Home() {
   }
 
   const handleFindMidpointClick = () => {
-    console.log(firstLocation, secondLocation)
+    getCoordsFromZip(firstLocation)
   }
 
   return (
