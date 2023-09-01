@@ -13,14 +13,14 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     let loc2 = await getCoordsFromZip(secondLocation);
     let midLon = (parseFloat(loc1.longitude) + parseFloat(loc2.longitude)) / 2;
     let midLat = (parseFloat(loc1.latitude) + parseFloat(loc2.latitude)) / 2;
-    midLon = parseFloat(midLon.toFixed(4))
-    midLat = parseFloat(midLat.toFixed(4))
+    midLon = parseFloat(midLon.toFixed(4));
+    midLat = parseFloat(midLat.toFixed(4));
     const midPointLoc = {
         longitude: midLon,
         latitude: midLat
     }
 
-    console.log(midPointLoc)
+    console.log(midPointLoc);
 }
 
 export default findMidpoint
