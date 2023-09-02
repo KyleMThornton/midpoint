@@ -8,6 +8,14 @@ const getCoordsFromZip = async(zipCode:number) => {
     return coords
 }
 
+const getCityFromZip = async(zipCode:number) => {
+    const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
+    const json = await response.json()
+    const city = json.places[0]["place name"]
+    const state = json.places[0]["state abbreviation"]
+    return `${city}, ${state}`
+}
+
 const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     let loc1 = await getCoordsFromZip(firstLocation);
     let loc2 = await getCoordsFromZip(secondLocation);
@@ -20,7 +28,7 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
         latitude: midLat
     }
 
-    console.log(midPointLoc);
+    return midPointLoc;
 }
 
-export default findMidpoint
+export { findMidpoint, getCityFromZip };

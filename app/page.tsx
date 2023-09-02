@@ -1,13 +1,24 @@
 "use client"
 
-import { useState } from "react"
-import findMidpoint from "./zipCodeConnection";
+import { useEffect, useState } from "react"
+import { findMidpoint, getCityFromZip } from "./zipCodeConnection";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
   const [secondLocation, setSecondLocation] = useState<number>(0);
   const [firstInputValue, setFirstInputValue] = useState('');
   const [secondInputValue, setSecondInputValue] = useState('');
+  const [firstCity, setFirstCity] = useState('');
+  const [secondCity, setSecondCity] = useState('');
+  const [midPoint, setMidPoint] = useState({});
+
+  const zipCodePattern = /^\d{5}(?:-\d{4})?$/
+
+  const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
+    duration: 1500,
+    position: 'top-center'
+  });
 
   const handleFirstInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFirstInputValue(event.target.value);
@@ -17,21 +28,33 @@ export default function Home() {
     setSecondInputValue(event.target.value);
   }
 
-  const handleFirstClick = () => {
-    const firstInputValNum = Number(firstInputValue);
-    setFirstLocation(firstInputValNum);
-    setFirstInputValue('');
+  const handleFirstClick = async () => {
+    if(zipCodePattern.test(firstInputValue)) {
+      const firstInputValNum = Number(firstInputValue);
+      setFirstLocation(firstInputValNum);
+      setFirstCity(await getCityFromZip(firstInputValNum));
+    } else {
+      invalidZipCodeToast();
+    }
   }
 
-  const handleSecondClick = () => {
-    const secondInputValNum = Number(secondInputValue);
-    setSecondLocation(secondInputValNum);
-    setSecondInputValue('');
+  const handleSecondClick = async () => {
+    if(zipCodePattern.test(secondInputValue)) {
+      const secondInputValNum = Number(secondInputValue);
+      setSecondLocation(secondInputValNum);
+      setSecondCity(await getCityFromZip(secondInputValNum));
+    } else {
+      invalidZipCodeToast();
+    }
   }
 
-  const handleFindMidpointClick = () => {
-    findMidpoint(firstLocation, secondLocation)
+  const handleFindMidpointClick = async () => {
+    setMidPoint(await findMidpoint(firstLocation, secondLocation))
   }
+
+  useEffect(() => {
+    midPoint !== null ? console.log(midPoint) : null
+  }, [midPoint])
 
   return (
     <main className="flex min-h-screen flex-col items-center p-12">
@@ -47,6 +70,9 @@ export default function Home() {
           <input type="text" maxLength={6} placeholder="First location zip code" className="input input-bordered w-full max-w-xs m-3" onChange={handleFirstInputChange} value={firstInputValue} />
           <button className="btn m-3" onClick={handleFirstClick}>Enter</button>
         </div>
+        {firstCity !== '' ? 
+        <p className="flex justify-center">{firstCity}</p> : 
+        null}
       </div>
       <div id="secondLocation">
         <div className="flex flex-row mt-5">
@@ -54,7 +80,11 @@ export default function Home() {
           <button className="btn m-3" onClick={handleSecondClick}>Enter</button>
         </div>
       </div>
+      {secondCity !== '' ? 
+      <p className="flex justify-center">{secondCity}</p> : 
+      null}
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick}>Find Midpoint</button>
+      <Toaster />
     </main>
   )
 }
