@@ -15,6 +15,8 @@ export default function Home() {
 
   const zipCodePattern = /^\d{5}(?:-\d{4})?$/
 
+  const isDisabled = !firstCity || !secondCity;
+
   const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
     duration: 1500,
     position: 'top-center'
@@ -52,6 +54,15 @@ export default function Home() {
     setMidPoint(await findMidpoint(firstLocation, secondLocation))
   }
 
+  const handleClearCities = () => {
+    setFirstLocation(0)
+    setFirstCity('')
+    setFirstInputValue('')
+    setSecondLocation(0)
+    setSecondCity('')
+    setSecondInputValue('')
+  }
+
   useEffect(() => {
     midPoint !== null ? console.log(midPoint) : null
   }, [midPoint])
@@ -83,7 +94,8 @@ export default function Home() {
       {secondCity !== '' ? 
       <p className="flex justify-center">{secondCity}</p> : 
       null}
-      <button className="btn btn-lg m-10" onClick={handleFindMidpointClick}>Find Midpoint</button>
+      <button className="btn mt-7" onClick={handleClearCities}>Clear Cities</button>
+      <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={isDisabled}>Find Midpoint</button>
       <Toaster />
     </main>
   )
