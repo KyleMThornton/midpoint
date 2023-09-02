@@ -13,7 +13,7 @@ export default function Home() {
   const [secondCity, setSecondCity] = useState('');
   const [midPoint, setMidPoint] = useState({});
 
-  const zipCodePattern = /^\d{5}(?:-\d{4})?$/
+  const zipCodePattern = /^\d{5}$/
 
   const isDisabled = !firstCity || !secondCity;
 
@@ -64,7 +64,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    midPoint !== null ? console.log(midPoint) : null
+    Object.keys(midPoint).length !== 0 ? console.log(midPoint) : null
   }, [midPoint])
 
   return (
@@ -78,7 +78,7 @@ export default function Home() {
       </div>
       <div id="firstLocation">
         <div className="flex flex-row mt-10">
-          <input type="text" maxLength={6} placeholder="First location zip code" className="input input-bordered w-full max-w-xs m-3" onChange={handleFirstInputChange} value={firstInputValue} />
+          <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs m-3" onChange={handleFirstInputChange} value={firstInputValue} />
           <button className="btn m-3" onClick={handleFirstClick}>Enter</button>
         </div>
         {firstCity !== '' ? 
@@ -87,7 +87,7 @@ export default function Home() {
       </div>
       <div id="secondLocation">
         <div className="flex flex-row mt-5">
-          <input type="text" maxLength={6} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs m-3" onChange={handleSecondInputChange} value={secondInputValue} />
+          <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs m-3" onChange={handleSecondInputChange} value={secondInputValue} />
           <button className="btn m-3" onClick={handleSecondClick}>Enter</button>
         </div>
       </div>
