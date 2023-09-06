@@ -15,7 +15,8 @@ export default function Home() {
 
   const zipCodePattern = /^\d{5}$/
 
-  const isDisabled = !firstCity || !secondCity;
+  const findMidpointButtonisDisabled = !firstCity || !secondCity;
+  const clearCitiesButtonisDisabled = !firstCity && !secondCity;
 
   const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
     duration: 1500,
@@ -98,14 +99,9 @@ export default function Home() {
       {secondCity !== '' ? 
       <p className="flex justify-center">{secondCity}</p> : 
       null}
-      <button className="btn mt-7" onClick={handleClearCities}>Clear Cities</button>
-      <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={isDisabled}>Find Midpoint</button>
-      <iframe
-            src={`https://maps.google.com/maps?q=""&output=embed`}
-            width={600}
-            height={400}
-            allowFullScreen>
-        </iframe>
+      <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear Cities</button>
+      <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
+      
       <Toaster />
     </main>
   )
