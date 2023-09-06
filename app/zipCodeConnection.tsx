@@ -31,4 +31,11 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     return midPointLoc;
 }
 
-export { findMidpoint, getCityFromZip };
+const APIKEY = process.env.OPENCAGE_API_KEY
+
+const getZipFromCoords = async(coords:any) => {
+    const city = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${coords.latitude}+${coords.longitude}&key=${APIKEY}`);
+    console.log(city.json())
+}
+
+export { findMidpoint, getCityFromZip, getZipFromCoords };
