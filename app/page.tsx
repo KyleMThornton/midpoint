@@ -32,9 +32,13 @@ export default function Home() {
 
   const handleFirstClick = async () => {
     if(zipCodePattern.test(firstInputValue)) {
-      const firstInputValNum = Number(firstInputValue);
-      setFirstLocation(firstInputValNum);
-      setFirstCity(await getCityFromZip(firstInputValNum));
+      try {
+        const firstInputValNum = Number(firstInputValue);
+        setFirstCity(await getCityFromZip(firstInputValNum));
+        setFirstLocation(firstInputValNum);
+      } catch(error) {
+        invalidZipCodeToast();
+      }
     } else {
       invalidZipCodeToast();
     }
@@ -96,6 +100,12 @@ export default function Home() {
       null}
       <button className="btn mt-7" onClick={handleClearCities}>Clear Cities</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={isDisabled}>Find Midpoint</button>
+      <iframe
+            src={`https://maps.google.com/maps?q=""&output=embed`}
+            width={600}
+            height={400}
+            allowFullScreen>
+        </iframe>
       <Toaster />
     </main>
   )
