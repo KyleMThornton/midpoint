@@ -1,3 +1,6 @@
+const OPENCAGE_APIKEY = process.env.OPENCAGE_API_KEY;
+const YELP_APIKEY = process.env.YELP_API_KEY;
+
 const getCoordsFromZip = async(zipCode:number) => {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
     const json = await response.json()
@@ -31,11 +34,21 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     return midPointLoc;
 }
 
-const APIKEY = process.env.OPENCAGE_API_KEY
-
 const getZipFromCoords = async(coords:any) => {
-    const city = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${coords.latitude}+${coords.longitude}&key=${APIKEY}`);
-    console.log(city.json())
+    const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${coords.latitude}+${coords.longitude}&key=${OPENCAGE_APIKEY}`);
+    const json = response.json()
+    console.log(json)
 }
 
-export { findMidpoint, getCityFromZip, getZipFromCoords };
+const searchBusinesses = async(city:any) => {
+    const response = await fetch('https://api.yelp.com/v3/businesses/search?location=Anaheim', {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${YELP_APIKEY}`
+        }
+    })
+    const data = await response.json();
+    console.log(data.businesses);
+}
+
+export { findMidpoint, getCityFromZip, getZipFromCoords, searchBusinesses };

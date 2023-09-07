@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { findMidpoint, getCityFromZip, getZipFromCoords } from "./zipCodeConnection";
+import { findMidpoint, getCityFromZip, getZipFromCoords, searchBusinesses } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -102,7 +102,7 @@ export default function Home() {
       null}
       <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear Cities</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
-
+      <button onClick={searchBusinesses}>Yelp test</button>
       <Toaster />
     </main>
   )
