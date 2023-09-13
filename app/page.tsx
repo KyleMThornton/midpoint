@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { findMidpoint, getCityFromZip, getZipFromCoords, searchBusinesses } from "./requests";
+import { useState } from "react"
+import { findMidpoint, getCityFromZip, getZipFromCoords } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -12,6 +12,7 @@ export default function Home() {
   const [firstCity, setFirstCity] = useState('');
   const [secondCity, setSecondCity] = useState('');
   const [midPoint, setMidPoint] = useState({});
+  const [yelpResponse, setYelpResponse] = useState();
 
   const zipCodePattern = /^\d{5}$/
 
@@ -69,9 +70,12 @@ export default function Home() {
     setSecondInputValue('')
   }
 
-  useEffect(() => {
-    Object.keys(midPoint).length !== 0 ? console.log(midPoint) : null
-  }, [midPoint])
+  const fetchYelpData = async() => {
+    const response = await fetch(`/api/yelp?city=Anaheim`)
+    const data:any = await response;
+    setYelpResponse(data)
+    console.log(data)
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center p-12">
@@ -102,7 +106,7 @@ export default function Home() {
       null}
       <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear Cities</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
-      <button onClick={searchBusinesses}>Yelp test</button>
+      <button onClick={fetchYelpData}>Yelp test</button>
       <Toaster />
     </main>
   )

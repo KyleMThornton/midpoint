@@ -1,5 +1,4 @@
 const OPENCAGE_APIKEY = process.env.OPENCAGE_API_KEY;
-const YELP_APIKEY = process.env.YELP_API_KEY;
 
 const getCoordsFromZip = async(zipCode:number) => {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
@@ -40,15 +39,4 @@ const getZipFromCoords = async(coords:any) => {
     console.log(json)
 }
 
-const searchBusinesses = async(city:any) => {
-    const response = await fetch('https://api.yelp.com/v3/businesses/search?location=Anaheim', {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${YELP_APIKEY}`
-        }
-    })
-    const data = await response.json();
-    console.log(data.businesses);
-}
-
-export { findMidpoint, getCityFromZip, getZipFromCoords, searchBusinesses };
+export { findMidpoint, getCityFromZip, getZipFromCoords };
