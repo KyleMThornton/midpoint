@@ -12,7 +12,7 @@ export async function GET(req:NextRequest, res:NextResponse) {
         }
         })
         const data = await response.json();
-        return NextResponse.json({message: `${data}`});
+        return NextResponse.json(data);
     } catch(error) {
         return NextResponse.json({status: 500});
     }
