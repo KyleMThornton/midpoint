@@ -12,7 +12,7 @@ export default function Home() {
   const [firstCity, setFirstCity] = useState('');
   const [secondCity, setSecondCity] = useState('');
   const [midPoint, setMidPoint] = useState({});
-  const [yelpResponse, setYelpResponse] = useState();
+  const [yelpResponse, setYelpResponse] = useState<any>();
 
   const zipCodePattern = /^\d{5}$/
 
@@ -58,7 +58,6 @@ export default function Home() {
 
   const handleFindMidpointClick = async () => {
     setMidPoint(await findMidpoint(firstLocation, secondLocation))
-    await getZipFromCoords(midPoint)
   }
 
   const handleClearCities = () => {
@@ -73,8 +72,20 @@ export default function Home() {
   const fetchYelpData = async() => {
     const response = await fetch(`/api/yelp?city=Anaheim`)
     const data:any = await response.json();
-    setYelpResponse(data)
-    console.log(data)
+    setYelpResponse(data.businesses)
+  }
+
+  const BusinessList = () => {
+    return (
+      <div>
+        <h2>Businesses</h2>
+        <ul className="flex flex-col">
+          <li>{yelpResponse[0].name}</li>
+          <li>{yelpResponse[1].name}</li>
+          <li>{yelpResponse[2].name}</li>
+        </ul>
+      </div>
+    )
   }
 
   return (
@@ -107,6 +118,7 @@ export default function Home() {
       <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear Cities</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
       <button onClick={fetchYelpData}>Yelp test</button>
+      {yelpResponse ? <BusinessList /> : null}
       <Toaster />
     </main>
   )
