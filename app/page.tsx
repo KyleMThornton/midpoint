@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useState } from "react"
 import { findMidpoint, getCityFromZip, getZipFromCoords } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -73,16 +73,33 @@ export default function Home() {
     const response = await fetch(`/api/yelp?city=Anaheim`)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
+    console.log(yelpResponse)
   }
 
   const BusinessList = () => {
+    const first10Yelp = yelpResponse.slice(0, 10)
+    const yelpBusinesses = first10Yelp.map((biz:any) => 
+      <div className="card w-96 bg-base-100 shadow-xl mt-5" key={biz.index}>
+        <figure><img src={biz.image_url} /></figure>
+        <div className="card-body">
+          <a href={biz.url} target="_blank"><h2 className="card-title">{biz.name}</h2></a>
+          <p>{biz.location.display_address[0]}</p>
+          <p>{biz.location.display_address[1]}</p>
+          <p>{biz.location.display_address[2]}</p>
+          <div className="card-actions justify-end pt-5">
+            {biz.categories.map((category:any) => (
+              <div className="badge badge-outline" key={category.alias}>{category.title}</div>
+            ))}
+            <div className="badge badge-outline">{biz.price}</div>
+          </div>
+        </div>
+      </div>  
+    )
+
     return (
       <div>
-        <h2>Businesses</h2>
         <ul className="flex flex-col">
-          <li>{yelpResponse[0].name}</li>
-          <li>{yelpResponse[1].name}</li>
-          <li>{yelpResponse[2].name}</li>
+          {yelpBusinesses}
         </ul>
       </div>
     )
@@ -117,7 +134,7 @@ export default function Home() {
       null}
       <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear Cities</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
-      <button onClick={fetchYelpData}>Yelp test</button>
+      <button className="btn mt-7" onClick={fetchYelpData}>Yelp test</button>
       {yelpResponse ? <BusinessList /> : null}
       <Toaster />
     </main>
