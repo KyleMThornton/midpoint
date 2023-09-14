@@ -82,14 +82,16 @@ export default function Home() {
         <figure><img src={biz.image_url} /></figure>
         <div className="card-body">
           <a href={biz.url} target="_blank"><h2 className="card-title">{biz.name}</h2></a>
-          <p>{biz.location.display_address[0]}</p>
-          <p>{biz.location.display_address[1]}</p>
-          <p>{biz.location.display_address[2]}</p>
+          <div>
+            <p>{biz.location.display_address[0]}</p>
+            <p>{biz.location.display_address[1]}</p>
+            <p>{biz.location.display_address[2]}</p>
+          </div>
           <div className="card-actions justify-end pt-5">
             {biz.categories.map((category:any) => (
               <div className="badge badge-outline" key={category.alias}>{category.title}</div>
             ))}
-            <div className="badge badge-outline">{biz.price}</div>
+            {biz.price ? <div className="badge badge-outline">{biz.price}</div> : null}
           </div>
         </div>
       </div>  
