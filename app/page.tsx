@@ -78,7 +78,7 @@ export default function Home() {
   const BusinessList = () => {
     const first10Yelp = yelpResponse.slice(0, 10)
     const yelpBusinesses = first10Yelp.map((biz:any) => 
-      <div className="card w-80 sm:w-96 h-96 bg-base-100 shadow-xl mt-5 sm:mx-5" key={biz.index}>
+      <div className="card w-80 sm:w-96 h-96 bg-white shadow-xl mt-5 sm:mx-5" key={biz.index}>
         <figure><img src={biz.image_url} /></figure>
         <div className="card-body">
           <a href={biz.url} target="_blank"><h2 className="card-title">{biz.name}</h2></a>
@@ -107,7 +107,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-12">
+    <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black">
       <header className="flex justify-between w-full">
         <p>logo</p>
         <p>about</p>
