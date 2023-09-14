@@ -73,7 +73,6 @@ export default function Home() {
     const response = await fetch(`/api/yelp?city=Anaheim`)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
-    console.log(yelpResponse)
   }
 
   const BusinessList = () => {
