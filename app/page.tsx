@@ -11,7 +11,7 @@ export default function Home() {
   const [secondInputValue, setSecondInputValue] = useState('');
   const [firstCity, setFirstCity] = useState('');
   const [secondCity, setSecondCity] = useState('');
-  const [midPoint, setMidPoint] = useState({});
+  const [midPoint, setMidPoint] = useState<any>();
   const [yelpResponse, setYelpResponse] = useState<any>();
 
   const zipCodePattern = /^\d{5}$/
