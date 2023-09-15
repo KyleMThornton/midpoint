@@ -12,6 +12,7 @@ export default function Home() {
   const [firstCity, setFirstCity] = useState('');
   const [secondCity, setSecondCity] = useState('');
   const [midPoint, setMidPoint] = useState<any>();
+  const [midPointCity, setMidPointCity] = useState<any>();
   const [yelpResponse, setYelpResponse] = useState<any>();
 
   const zipCodePattern = /^\d{5}$/
@@ -62,7 +63,7 @@ export default function Home() {
 
   useEffect(() => {
     if(midPoint) {
-      getZipFromCoords(midPoint.latitude, midPoint.longitude)
+      setMidPointCity(getZipFromCoords(midPoint.latitude, midPoint.longitude))
     }
   }, [midPoint])
 
@@ -74,10 +75,12 @@ export default function Home() {
     setSecondCity('')
     setSecondInputValue('')
     setYelpResponse(null)
+    setMidPointCity('')
   }
 
   const fetchYelpData = async() => {
-    const response = await fetch(`/api/yelp?city=Anaheim`)
+    const response = await fetch(`/api/yelp?city=${midPointCity.value}`)
+    console.log(midPointCity.value)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
   }
@@ -151,6 +154,9 @@ export default function Home() {
       null}
       <button className="btn mt-7" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear</button>
       <button className="btn btn-lg m-10" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
+      {midPointCity !== '' ? 
+      <p className="flex justify-center">{midPointCity}</p> : 
+      null}
       <button className="btn mt-7" onClick={fetchYelpData}>Yelp test</button>
       {yelpResponse ? <BusinessList /> : null}
       <Toaster />

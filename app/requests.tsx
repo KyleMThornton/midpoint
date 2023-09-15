@@ -33,8 +33,8 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
 const getZipFromCoords = async(latitude:number,longitude:number) => {
     const response = await fetch(`/api/opencage?lat=${latitude}&lon=${longitude}`);
     const json = await response.json()
-    console.log(json.results[0].components.town)
-    return json
+    const city = json.results[0].components.town
+    return city
 }
 
 export { findMidpoint, getCityFromZip, getZipFromCoords };
