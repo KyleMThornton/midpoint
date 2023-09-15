@@ -1,5 +1,3 @@
-const OPENCAGE_APIKEY = process.env.OPENCAGE_API_KEY;
-
 const getCoordsFromZip = async(zipCode:number) => {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
     const json = await response.json()
@@ -29,13 +27,13 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
         longitude: midLon,
         latitude: midLat
     }
-
     return midPointLoc;
 }
 
-const getZipFromCoords = async(coords:any) => {
-    const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${coords.latitude}+${coords.longitude}&key=${OPENCAGE_APIKEY}`);
-    const json = response.json()
+const getZipFromCoords = async(latitude:number,longitude:number) => {
+    const response = await fetch(`/api/opencage?lat=${latitude}&lon=${longitude}`);
+    const json = await response.json()
+    console.log(json.results[0].components.town)
     return json
 }
 

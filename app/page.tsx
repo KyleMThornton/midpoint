@@ -1,6 +1,6 @@
 "use client"
 
-import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useState } from "react"
+import { JSXElementConstructor, PromiseLikeOfReactNode, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react"
 import { findMidpoint, getCityFromZip, getZipFromCoords } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -59,6 +59,12 @@ export default function Home() {
   const handleFindMidpointClick = async () => {
     setMidPoint(await findMidpoint(firstLocation, secondLocation))
   }
+
+  useEffect(() => {
+    if(midPoint) {
+      getZipFromCoords(midPoint.latitude, midPoint.longitude)
+    }
+  }, [midPoint])
 
   const handleClearCities = () => {
     setFirstLocation(0)
