@@ -7,3 +7,4 @@ Created using NextJS, typescript, Tailwind, and daisyui.
 APIs used:
 yelp
 zippopotam.us
+rapidai

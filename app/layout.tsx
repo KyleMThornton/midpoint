@@ -18,7 +18,7 @@ export default function RootLayout({
       <body className={inter.className}>{children}</body>
       <footer className="footer footer-center p-4 bg-base-300 text-base-content">
         <aside>
-          <p>Made with ❤️ by Kyle Thornton</p>
+          <p>Made with ❤️ by <a href="https://github.com/KyleMThornton" target="_blank">Kyle Thornton</a></p>
         </aside>
       </footer>
     </html>
