@@ -16,6 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>{children}</body>
+      <footer className="footer footer-center p-4 bg-base-300 text-base-content">
+        <aside>
+          <p>Made with ❤️ by Kyle Thornton</p>
+        </aside>
+      </footer>
     </html>
   )
 }
