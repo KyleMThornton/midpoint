@@ -67,6 +67,12 @@ export default function Home() {
     }
   }, [midPoint])
 
+  useEffect(() => {
+    if(midPointCity) {
+      fetchYelpData()
+    }
+  }, [midPointCity])
+
   const handleClearCities = () => {
     setFirstLocation(0)
     setFirstCity('')
@@ -80,7 +86,6 @@ export default function Home() {
 
   const fetchYelpData = async() => {
     const response = await fetch(`/api/yelp?city=${midPointCity}`)
-    console.log(midPointCity)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
   }
@@ -88,7 +93,6 @@ export default function Home() {
   const fetchNearestCity = async() => {
     const response = await fetch(`/api/rapidapi?lat=${midPoint.latitude}&lon=${midPoint.longitude}`)
     const data:any = await response.json();
-    console.log(data.data[0].city)
     setMidPointCity(data.data[0].city)
   }
 
@@ -164,12 +168,6 @@ export default function Home() {
       {midPointCity !== '' ? 
       <p className="flex justify-center">{midPointCity}</p> : 
       null}
-      <h2>What do you want to do in {midPointCity}?</h2>
-      <select className="select select-bordered w-l mt-5">
-        <option>Get something to eat</option>
-        <option>Have some fun</option>
-      </select>
-      <button className="btn mt-7" onClick={fetchYelpData}>Yelp test</button>
       {yelpResponse ? <BusinessList /> : null}
       <Toaster />
     </main>
