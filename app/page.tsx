@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { findMidpoint, getCityFromZip, getZipFromCoords } from "./requests";
+import { findMidpoint, getCityFromZip } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
@@ -164,6 +164,11 @@ export default function Home() {
       {midPointCity !== '' ? 
       <p className="flex justify-center">{midPointCity}</p> : 
       null}
+      <h2>What do you want to do in {midPointCity}?</h2>
+      <select className="select select-bordered w-l mt-5">
+        <option>Get something to eat</option>
+        <option>Have some fun</option>
+      </select>
       <button className="btn mt-7" onClick={fetchYelpData}>Yelp test</button>
       {yelpResponse ? <BusinessList /> : null}
       <Toaster />
