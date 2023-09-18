@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req:NextRequest, res:NextResponse) {
     const city = req.nextUrl.searchParams.get('city');
+    const state = req.nextUrl.searchParams.get('state');
     const YELP_API_KEY = process.env.YELP_API_KEY;
 
     try {
-        const response = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}`, {
+        const response = await fetch(`https://api.yelp.com/v3/businesses/search?location=${city}${state}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${YELP_API_KEY}`

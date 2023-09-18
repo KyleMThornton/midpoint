@@ -14,6 +14,7 @@ export default function Home() {
   const [secondCity, setSecondCity] = useState('');
   const [midPoint, setMidPoint] = useState<any>('');
   const [midPointCity, setMidPointCity] = useState<any>('');
+  const [midPointState, setMidPointState] = useState<any>('');
   const [yelpResponse, setYelpResponse] = useState<any>();
 
   const zipCodePattern = /^\d{5}$/
@@ -83,10 +84,11 @@ export default function Home() {
     setSecondInputValue('')
     setYelpResponse(null)
     setMidPointCity('')
+    setMidPointState('')
   }
 
   const fetchYelpData = async() => {
-    const response = await fetch(`/api/yelp?city=${midPointCity}`)
+    const response = await fetch(`/api/yelp?city=${midPointCity}&state=${midPointState}`)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
   }
@@ -95,6 +97,7 @@ export default function Home() {
     const response = await fetch(`/api/rapidapi?lat=${midPoint.latitude}&lon=${midPoint.longitude}`)
     const data:any = await response.json();
     setMidPointCity(data.data[0].city)
+    setMidPointState(data.data[0].regionCode)
   }
 
   const BusinessList = () => {
@@ -168,7 +171,7 @@ export default function Home() {
       {midPointCity !== '' ?
       <div className="flex flex-col text-center"> 
         <h2 className="flex justify-center">Your mid point is:</h2>
-        <span style={{ fontWeight: 'bold' }}>{midPointCity}</span>
+        <span style={{ fontWeight: 'bold' }}>{midPointCity}, {midPointState}</span>
         <h2> Heres some fun things to do there:</h2>
       </div> : 
       null}
