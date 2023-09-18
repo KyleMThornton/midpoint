@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { findMidpoint, getCityFromZip } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -11,8 +12,8 @@ export default function Home() {
   const [secondInputValue, setSecondInputValue] = useState('');
   const [firstCity, setFirstCity] = useState('');
   const [secondCity, setSecondCity] = useState('');
-  const [midPoint, setMidPoint] = useState<any>();
-  const [midPointCity, setMidPointCity] = useState<any>();
+  const [midPoint, setMidPoint] = useState<any>('');
+  const [midPointCity, setMidPointCity] = useState<any>('');
   const [yelpResponse, setYelpResponse] = useState<any>();
 
   const zipCodePattern = /^\d{5}$/
