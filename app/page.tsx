@@ -102,10 +102,10 @@ export default function Home() {
   const BusinessList = () => {
     const first10Yelp = yelpResponse.slice(0, 10)
     const yelpBusinesses = first10Yelp.map((biz:any) => 
-      <div className="card w-80 sm:w-96 h-96 bg-white shadow-xl mt-5 sm:mx-5" key={biz.index}>
-        <figure><img src={biz.image_url} /></figure>
+      <div className="card w-80 sm:w-96 h-96 bg-white shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
+        <figure><a href={biz.url} target="_blank"><img src={biz.image_url} className="group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 ease-in-out" /></a></figure>
         <div className="card-body">
-          <a href={biz.url} target="_blank"><h2 className="card-title">{biz.name}</h2></a>
+          <a href={biz.url} target="_blank"><h2 className="card-title group-hover:underline">{biz.name}</h2></a>
           <div>
             <p>{biz.location.display_address[0]}</p>
             <p>{biz.location.display_address[1]}</p>
