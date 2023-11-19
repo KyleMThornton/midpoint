@@ -1,3 +1,10 @@
+import toast from "react-hot-toast";
+
+const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
+    duration: 1500,
+    position: 'top-center'
+});
+
 const getCoordsFromZip = async(zipCode:number) => {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
     const json = await response.json()
@@ -9,11 +16,15 @@ const getCoordsFromZip = async(zipCode:number) => {
 }
 
 const getCityFromZip = async(zipCode:number) => {
+    try {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
     const json = await response.json()
     const city = json.places[0]["place name"]
     const state = json.places[0]["state abbreviation"]
     return `${city}, ${state}`
+    } catch(error) {
+        invalidZipCodeToast();
+    }
 }
 
 const findMidpoint = async(firstLocation:number, secondLocation:number) => {
@@ -30,4 +41,4 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     return midPointLoc;
 }
 
-export { findMidpoint, getCityFromZip };
+export { findMidpoint, getCityFromZip, invalidZipCodeToast };

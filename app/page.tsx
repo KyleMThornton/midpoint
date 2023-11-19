@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { findMidpoint, getCityFromZip } from "./requests";
-import toast, { Toaster } from 'react-hot-toast';
+import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
+import { Toaster } from 'react-hot-toast';
+import { ThemeController } from "./components/ThemeController";
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -15,16 +16,12 @@ export default function Home() {
   const [midPointCity, setMidPointCity] = useState<any>('');
   const [midPointState, setMidPointState] = useState<any>('');
   const [yelpResponse, setYelpResponse] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const zipCodePattern = /^\d{5}$/
 
   const findMidpointButtonisDisabled = !firstCity || !secondCity;
   const clearCitiesButtonisDisabled = !firstCity && !secondCity && !yelpResponse;
-
-  const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
-    duration: 1500,
-    position: 'top-center'
-  });
 
   const handleFirstInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFirstInputValue(event.target.value);
@@ -38,7 +35,7 @@ export default function Home() {
     if(zipCodePattern.test(firstInputValue)) {
       try {
         const firstInputValNum = Number(firstInputValue);
-        setFirstCity(await getCityFromZip(firstInputValNum));
+        setFirstCity(await getCityFromZip(firstInputValNum) || '');
         setFirstLocation(firstInputValNum);
       } catch(error) {
         invalidZipCodeToast();
@@ -52,7 +49,7 @@ export default function Home() {
     if(zipCodePattern.test(secondInputValue)) {
       const secondInputValNum = Number(secondInputValue);
       setSecondLocation(secondInputValNum);
-      setSecondCity(await getCityFromZip(secondInputValNum));
+      setSecondCity(await getCityFromZip(secondInputValNum) || '');
     } else {
       invalidZipCodeToast();
     }
@@ -90,6 +87,7 @@ export default function Home() {
     const response = await fetch(`/api/yelp?city=${midPointCity}&state=${midPointState}`)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
+    setIsLoading(false)
   }
 
   const fetchNearestCity = async() => {
@@ -97,12 +95,13 @@ export default function Home() {
     const data:any = await response.json();
     setMidPointCity(data.data[0].city)
     setMidPointState(data.data[0].regionCode)
+    setIsLoading(true)
   }
 
   const BusinessList = () => {
     const first10Yelp = yelpResponse.slice(0, 10)
     const yelpBusinesses = first10Yelp.map((biz:any) => 
-      <div className="card w-80 sm:w-96 h-96 bg-white shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
+      <div className="card w-80 sm:w-96 h-96 bg-white dark:bg-zinc-800 shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
         <figure><a href={biz.url} target="_blank"><img src={biz.image_url} className="group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 ease-in-out" /></a></figure>
         <div className="card-body">
           <a href={biz.url} target="_blank"><h2 className="card-title group-hover:underline">{biz.name}</h2></a>
@@ -131,7 +130,11 @@ export default function Home() {
   }
 
   return (
-      <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black">
+    <main className="bg-white text-black dark:bg-zinc-700 dark:text-white">
+        <div className="flex justify-end pr-5 pt-5 ">
+          <ThemeController />
+        </div>
+      <div className="flex min-h-screen flex-col items-center px-8 pb-8">
         <div className="flex flex-col text-center">
           <h1 className="text-3xl py-3">midpoint</h1>
           <h3>Discover the perfect meeting point between two locations!</h3>
@@ -139,7 +142,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row pt-10">
           <div id="firstLocation" className="p-5">
             <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs" onChange={handleFirstInputChange} value={firstInputValue} />
+              <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleFirstInputChange} value={firstInputValue} />
               <button className="btn ml-1" onClick={handleFirstClick}>Enter</button>
             </div>
             {firstCity !== '' ? 
@@ -148,7 +151,7 @@ export default function Home() {
           </div>
           <div id="secondLocation" className="p-5">
             <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs" onChange={handleSecondInputChange} value={secondInputValue} />
+              <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleSecondInputChange} value={secondInputValue} />
               <button className="btn ml-1" onClick={handleSecondClick}>Enter</button>
             </div>
             {secondCity !== '' ? 
@@ -165,8 +168,10 @@ export default function Home() {
           <h2> Heres some fun things to do there:</h2>
         </div> : 
         null}
+        {isLoading ? <span className="loading loading-dots loading-lg"></span> : null}
         {yelpResponse ? <BusinessList /> : null}
         <Toaster />
+      </div>
       </main>
   )
 }
