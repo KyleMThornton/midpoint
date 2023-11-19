@@ -101,7 +101,7 @@ export default function Home() {
   const BusinessList = () => {
     const first10Yelp = yelpResponse.slice(0, 10)
     const yelpBusinesses = first10Yelp.map((biz:any) => 
-      <div className="card w-80 sm:w-96 h-96 bg-white shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
+      <div className="card w-80 sm:w-96 h-96 bg-white dark:bg-zinc-800 shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
         <figure><a href={biz.url} target="_blank"><img src={biz.image_url} className="group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 ease-in-out" /></a></figure>
         <div className="card-body">
           <a href={biz.url} target="_blank"><h2 className="card-title group-hover:underline">{biz.name}</h2></a>
@@ -130,10 +130,11 @@ export default function Home() {
   }
 
   return (
-      <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black dark:bg-zinc-950 dark:text-white">
-        {/* <div className="content-end">
+    <main className="bg-white text-black dark:bg-zinc-700 dark:text-white">
+        <div className="flex justify-end pr-5 pt-5 ">
           <ThemeController />
-        </div> */}
+        </div>
+      <div className="flex min-h-screen flex-col items-center px-8 pb-8">
         <div className="flex flex-col text-center">
           <h1 className="text-3xl py-3">midpoint</h1>
           <h3>Discover the perfect meeting point between two locations!</h3>
@@ -170,6 +171,7 @@ export default function Home() {
         {isLoading ? <span className="loading loading-dots loading-lg"></span> : null}
         {yelpResponse ? <BusinessList /> : null}
         <Toaster />
+      </div>
       </main>
   )
 }
