@@ -131,9 +131,9 @@ export default function Home() {
 
   return (
       <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black dark:bg-zinc-950 dark:text-white">
-        <div className="content-end">
+        {/* <div className="content-end">
           <ThemeController />
-        </div>
+        </div> */}
         <div className="flex flex-col text-center">
           <h1 className="text-3xl py-3">midpoint</h1>
           <h3>Discover the perfect meeting point between two locations!</h3>
