@@ -1,8 +1,8 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
-import { findMidpoint, getCityFromZip } from "./requests";
-import toast, { Toaster } from 'react-hot-toast';
+import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
+import { Toaster } from 'react-hot-toast';
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -22,11 +22,6 @@ export default function Home() {
   const findMidpointButtonisDisabled = !firstCity || !secondCity;
   const clearCitiesButtonisDisabled = !firstCity && !secondCity && !yelpResponse;
 
-  const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
-    duration: 1500,
-    position: 'top-center'
-  });
-
   const handleFirstInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFirstInputValue(event.target.value);
   }
@@ -39,7 +34,7 @@ export default function Home() {
     if(zipCodePattern.test(firstInputValue)) {
       try {
         const firstInputValNum = Number(firstInputValue);
-        setFirstCity(await getCityFromZip(firstInputValNum));
+        setFirstCity(await getCityFromZip(firstInputValNum) || '');
         setFirstLocation(firstInputValNum);
       } catch(error) {
         invalidZipCodeToast();
@@ -53,7 +48,7 @@ export default function Home() {
     if(zipCodePattern.test(secondInputValue)) {
       const secondInputValNum = Number(secondInputValue);
       setSecondLocation(secondInputValNum);
-      setSecondCity(await getCityFromZip(secondInputValNum));
+      setSecondCity(await getCityFromZip(secondInputValNum) || '');
     } else {
       invalidZipCodeToast();
     }
