@@ -1,8 +1,9 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
 import { Toaster } from 'react-hot-toast';
+import { ThemeController } from "./components/ThemeController";
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -129,7 +130,10 @@ export default function Home() {
   }
 
   return (
-      <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black">
+      <main className="flex min-h-screen flex-col items-center p-12 bg-white text-black dark:bg-zinc-950 dark:text-white">
+        <div className="content-end">
+          <ThemeController />
+        </div>
         <div className="flex flex-col text-center">
           <h1 className="text-3xl py-3">midpoint</h1>
           <h3>Discover the perfect meeting point between two locations!</h3>
@@ -137,7 +141,7 @@ export default function Home() {
         <div className="flex flex-col md:flex-row pt-10">
           <div id="firstLocation" className="p-5">
             <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs" onChange={handleFirstInputChange} value={firstInputValue} />
+              <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleFirstInputChange} value={firstInputValue} />
               <button className="btn ml-1" onClick={handleFirstClick}>Enter</button>
             </div>
             {firstCity !== '' ? 
@@ -146,7 +150,7 @@ export default function Home() {
           </div>
           <div id="secondLocation" className="p-5">
             <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs" onChange={handleSecondInputChange} value={secondInputValue} />
+              <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleSecondInputChange} value={secondInputValue} />
               <button className="btn ml-1" onClick={handleSecondClick}>Enter</button>
             </div>
             {secondCity !== '' ? 
