@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { findMidpoint, getCityFromZip } from "./requests";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -15,6 +15,7 @@ export default function Home() {
   const [midPointCity, setMidPointCity] = useState<any>('');
   const [midPointState, setMidPointState] = useState<any>('');
   const [yelpResponse, setYelpResponse] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const zipCodePattern = /^\d{5}$/
 
@@ -90,6 +91,7 @@ export default function Home() {
     const response = await fetch(`/api/yelp?city=${midPointCity}&state=${midPointState}`)
     const data:any = await response.json();
     setYelpResponse(data.businesses)
+    setIsLoading(false)
   }
 
   const fetchNearestCity = async() => {
@@ -97,6 +99,7 @@ export default function Home() {
     const data:any = await response.json();
     setMidPointCity(data.data[0].city)
     setMidPointState(data.data[0].regionCode)
+    setIsLoading(true)
   }
 
   const BusinessList = () => {
@@ -165,6 +168,7 @@ export default function Home() {
           <h2> Heres some fun things to do there:</h2>
         </div> : 
         null}
+        {isLoading ? <span className="loading loading-dots loading-lg"></span> : null}
         {yelpResponse ? <BusinessList /> : null}
         <Toaster />
       </main>
