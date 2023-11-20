@@ -57,6 +57,7 @@ export default function Home() {
 
   const handleFindMidpointClick = async () => {
     setMidPoint(await findMidpoint(firstLocation, secondLocation))
+    setIsLoading(true)
   }
 
   useEffect(() => {
