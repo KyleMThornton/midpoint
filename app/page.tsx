@@ -148,7 +148,7 @@ export default function Home() {
                   type="text"
                   maxLength={5}
                   placeholder="First location zip code"
-                  className="input input-bordered w-full max-w-xs text-black"
+                  className="input input-bordered w-full max-w-xs"
                   onChange={handleFirstInputChange}
                   value={firstInputValue}
                 />
@@ -166,7 +166,7 @@ export default function Home() {
                   type="text"
                   maxLength={5}
                   placeholder="Second location zip code"
-                  className="input input-bordered w-full max-w-xs text-black"
+                  className="input input-bordered w-full max-w-xs"
                   onChange={handleSecondInputChange}
                   value={secondInputValue}
                 />
