@@ -19,6 +19,6 @@ const config: Config = {
     },
   },
   plugins: [require("daisyui")],
-  darkMode: "class",
+  darkMode: ["class", "[data-theme=dark]"]
 }
 export default config
