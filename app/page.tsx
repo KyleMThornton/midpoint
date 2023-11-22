@@ -131,48 +131,84 @@ export default function Home() {
   }
 
   return (
-    <main className="bg-white text-black dark:bg-zinc-700 dark:text-white">
+    <main className="bg-zinc-200 text-black dark:bg-zinc-700 dark:text-white">
+      <div className="container">
         <div className="flex justify-end pr-5 pt-5 ">
           <ThemeController />
         </div>
-      <div className="flex min-h-screen flex-col items-center px-8 pb-8">
-        <div className="flex flex-col text-center">
-          <h1 className="text-3xl py-3">midpoint</h1>
-          <h3>Discover the perfect meeting point between two locations!</h3>
-        </div>
-        <div className="flex flex-col md:flex-row pt-10">
-          <div id="firstLocation" className="p-5">
-            <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="First location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleFirstInputChange} value={firstInputValue} />
-              <button className="btn ml-1" onClick={handleFirstClick}>Enter</button>
-            </div>
-            {firstCity !== '' ? 
-            <p className="flex justify-center mt-2">{firstCity}</p> : 
-            null}
+        <div className="flex min-h-screen flex-col items-center px-8 pb-8">
+          <div className="flex flex-col text-center">
+            <h1 className="text-3xl py-3">midpoint</h1>
+            <h3>Discover the perfect meeting point between two locations!</h3>
           </div>
-          <div id="secondLocation" className="p-5">
-            <div className="flex flex-row">
-              <input type="text" maxLength={5} placeholder="Second location zip code" className="input input-bordered w-full max-w-xs text-black" onChange={handleSecondInputChange} value={secondInputValue} />
-              <button className="btn ml-1" onClick={handleSecondClick}>Enter</button>
+          <div className="flex flex-col md:flex-row pt-10">
+            <div id="firstLocation" className="p-5">
+              <div className="flex flex-row">
+                <input
+                  type="text"
+                  maxLength={5}
+                  placeholder="First location zip code"
+                  className="input input-bordered w-full max-w-xs"
+                  onChange={handleFirstInputChange}
+                  value={firstInputValue}
+                />
+                <button className="btn ml-1" onClick={handleFirstClick}>
+                  Enter
+                </button>
+              </div>
+              {firstCity !== "" ? (
+                <p className="flex justify-center mt-2">{firstCity}</p>
+              ) : null}
             </div>
-            {secondCity !== '' ? 
-            <p className="flex justify-center mt-2">{secondCity}</p> : 
-            null}
+            <div id="secondLocation" className="p-5">
+              <div className="flex flex-row">
+                <input
+                  type="text"
+                  maxLength={5}
+                  placeholder="Second location zip code"
+                  className="input input-bordered w-full max-w-xs"
+                  onChange={handleSecondInputChange}
+                  value={secondInputValue}
+                />
+                <button className="btn ml-1" onClick={handleSecondClick}>
+                  Enter
+                </button>
+              </div>
+              {secondCity !== "" ? (
+                <p className="flex justify-center mt-2">{secondCity}</p>
+              ) : null}
+            </div>
           </div>
+          <button
+            className="btn mt-5"
+            onClick={handleClearCities}
+            disabled={clearCitiesButtonisDisabled}
+          >
+            Clear All
+          </button>
+          <button
+            className="btn btn-lg m-5"
+            onClick={handleFindMidpointClick}
+            disabled={findMidpointButtonisDisabled}
+          >
+            Find Midpoint
+          </button>
+          {midPointCity !== "" ? (
+            <div className="flex flex-col text-center">
+              <h2 className="flex justify-center">Your mid point is:</h2>
+              <span style={{ fontWeight: "bold" }}>
+                {midPointCity}, {midPointState}
+              </span>
+              <h2> Heres some fun things to do there:</h2>
+            </div>
+          ) : null}
+          {isLoading ? (
+            <span className="loading loading-dots loading-lg"></span>
+          ) : null}
+          {yelpResponse ? <BusinessList /> : null}
+          <Toaster />
         </div>
-        <button className="btn mt-5" onClick={handleClearCities} disabled={clearCitiesButtonisDisabled}>Clear All</button>
-        <button className="btn btn-lg m-5" onClick={handleFindMidpointClick} disabled={findMidpointButtonisDisabled}>Find Midpoint</button>
-        {midPointCity !== '' ?
-        <div className="flex flex-col text-center"> 
-          <h2 className="flex justify-center">Your mid point is:</h2>
-          <span style={{ fontWeight: 'bold' }}>{midPointCity}, {midPointState}</span>
-          <h2> Heres some fun things to do there:</h2>
-        </div> : 
-        null}
-        {isLoading ? <span className="loading loading-dots loading-lg"></span> : null}
-        {yelpResponse ? <BusinessList /> : null}
-        <Toaster />
       </div>
-      </main>
-  )
+    </main>
+  );
 }
