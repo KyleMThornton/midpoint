@@ -5,13 +5,13 @@ export default function Rating({ rating }: { rating: number }) {
     const dec = rating % 1;
     const stars = [];
     for (let i = 0; i < num; i++) {
-        stars.push(<span className="text-yellow-400"><IoStar /></span>);
+        stars.push(<span className="text-yellow-400 text-2xl"><IoStar /></span>);
     }
     if (dec >= 0.5) {
-        stars.push(<span className="text-yellow-400"><IoStarHalf /></span>);
+        stars.push(<span className="text-yellow-400 text-2xl"><IoStarHalf /></span>);
     }
     for (let i = 0; i < 5 - num - (dec >= 0.5 ? 1 : 0); i++) {
-        stars.push(<span className="text-yellow-400"><IoStarOutline /></span>);
+        stars.push(<span className="text-yellow-400 text-2xl"><IoStarOutline /></span>);
     }
     return (
         <div className="flex">
