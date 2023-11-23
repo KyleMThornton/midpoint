@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
 import { Toaster } from 'react-hot-toast';
 import { ThemeController } from "./components/ThemeController";
+import Rating from "./components/Rating";
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -110,6 +111,9 @@ export default function Home() {
             <p>{biz.location.display_address[0]}</p>
             <p>{biz.location.display_address[1]}</p>
             <p>{biz.location.display_address[2]}</p>
+          </div>
+          <div>
+            <Rating rating={biz.rating} />
           </div>
           <div className="card-actions justify-end pt-5">
             {biz.categories.map((category:any) => (
