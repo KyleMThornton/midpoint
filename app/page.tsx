@@ -121,7 +121,7 @@ export default function Home() {
             {biz.categories.map((category:any) => (
               <div className="badge badge-outline" key={category.alias}>{category.title}</div>
             ))}
-            {biz.price ? <div className="badge badge-outline">{biz.price}</div> : null}
+            {biz.price ? <div className="badge badge-accent">{biz.price}</div> : null}
           </div>
         </div>
       </div>  
