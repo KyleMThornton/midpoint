@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
 import { Toaster } from 'react-hot-toast';
 import { ThemeController } from "./components/ThemeController";
 import Rating from "./components/Rating";
+import FindZip from "./components/FindZip";
 
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
@@ -146,6 +147,9 @@ export default function Home() {
           <div className="flex flex-col text-center">
             <h1 className="text-3xl py-3">midpoint</h1>
             <h3>Discover the perfect meeting point between two locations!</h3>
+          </div>
+          <div className="pt-5">
+            <FindZip />
           </div>
           <div className="flex flex-col md:flex-row pt-10">
             <div id="firstLocation" className="p-5">
