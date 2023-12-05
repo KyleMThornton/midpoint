@@ -5,6 +5,11 @@ const invalidZipCodeToast = () => toast(`✋ Invalid Zip Code`, {
     position: 'top-center'
 });
 
+const invalidCityStateToast = () => toast(`✋ Invalid City or State`, {
+    duration: 1500,
+    position: 'top-center'
+});
+
 const getCoordsFromZip = async(zipCode:number) => {
     const response:any = await fetch(`https://api.zippopotam.us/us/${zipCode}`);
     const json = await response.json()
@@ -41,4 +46,4 @@ const findMidpoint = async(firstLocation:number, secondLocation:number) => {
     return midPointLoc;
 }
 
-export { findMidpoint, getCityFromZip, invalidZipCodeToast };
+export { findMidpoint, getCityFromZip, invalidZipCodeToast, invalidCityStateToast };
