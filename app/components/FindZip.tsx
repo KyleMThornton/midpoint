@@ -18,7 +18,6 @@ export default function FindZip() {
 
     const handleZipFind = async (location:string) => {
         const city = location;
-        const state = document.getElementById('state')?.value;
         const res = await fetch(`https://api.zippopotam.us/us/${state}/${city}`);
         if(res.status !== 200) {
             invalidCityStateToast();
