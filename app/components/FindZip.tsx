@@ -30,7 +30,7 @@ export default function FindZip() {
       <div className="collapse bg-base-200 dark:bg-zinc-750 w-80">
         <input type="checkbox" />
         <div className="collapse-title text-md">
-          <p>Don't know your zip? Click me!</p>
+          Don&apos;t know your zip? Click me!
         </div>
         <div className="collapse-content">
         <div className="flex flex-row">
