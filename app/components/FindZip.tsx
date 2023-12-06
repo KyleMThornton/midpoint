@@ -6,10 +6,16 @@ import { invalidCityStateToast } from "../requests";
 export default function FindZip() {
     const [text, setText] = useState('');
     const [zip, setZip] = useState('');
+    const [state, setState] = useState('CA');
 
     const handleTextUpdate = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     }
+
+    const handleStateUpdate = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setState(event.target.value);
+    }
+
     const handleZipFind = async (location:string) => {
         const city = location;
         const state = document.getElementById('state')?.value;
@@ -21,6 +27,7 @@ export default function FindZip() {
         const data = await res.json();
         setZip(data.places[0]['post code']);
     }
+
     const handleClearZip = () => {
         setZip('');
         setText('');
@@ -41,7 +48,7 @@ export default function FindZip() {
                   onChange={handleTextUpdate}
                   value={text}
                 />
-                <select name="state" id="state" className="select select-bordered">
+                <select name="state" id="state" className="select select-bordered" value={state} onChange={handleStateUpdate}>
                   <option value="AL">AL</option>
                   <option value="AK">AK</option>
                   <option value="AR">AR</option>
@@ -96,9 +103,12 @@ export default function FindZip() {
                   <option value="WV">WV</option>
                   <option value="WY">WY</option>
                 </select>
-                {zip === '' ? <button className="btn ml-1 bg-base-100" onClick={() => handleZipFind(text)}>Enter</button> : <button className="btn ml-1 bg-base-100" onClick={() => handleClearZip()}>Clear</button>}
+                <button className="btn ml-1 bg-base-100" onClick={() => handleZipFind(text)}>Enter</button>
               </div>
-              {zip !== '' ? <p className="flex justify-center mt-2">{zip}</p> : null}
+              <div className="flex items-center">
+              {zip !== '' ? <p className="flex justify-center mt-2 ml-24">{zip}</p> : null}
+              {zip !== '' ? <button className="btn mt-2 bg-base-100 ml-5" onClick={handleClearZip}>Clear</button> : null}
+              </div>
         </div>
       </div>
     );
