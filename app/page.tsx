@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { findMidpoint, getCityFromZip, invalidZipCodeToast } from "./requests";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 import { ThemeController } from "./components/ThemeController";
 import Rating from "./components/Rating";
 import FindZip from "./components/FindZip";
@@ -10,105 +10,126 @@ import FindZip from "./components/FindZip";
 export default function Home() {
   const [firstLocation, setFirstLocation] = useState<number>(0);
   const [secondLocation, setSecondLocation] = useState<number>(0);
-  const [firstInputValue, setFirstInputValue] = useState('');
-  const [secondInputValue, setSecondInputValue] = useState('');
-  const [firstCity, setFirstCity] = useState('');
-  const [secondCity, setSecondCity] = useState('');
-  const [midPoint, setMidPoint] = useState<any>('');
-  const [midPointCity, setMidPointCity] = useState<any>('');
-  const [midPointState, setMidPointState] = useState<any>('');
+  const [firstInputValue, setFirstInputValue] = useState("");
+  const [secondInputValue, setSecondInputValue] = useState("");
+  const [firstCity, setFirstCity] = useState("");
+  const [secondCity, setSecondCity] = useState("");
+  const [midPoint, setMidPoint] = useState<any>("");
+  const [midPointCity, setMidPointCity] = useState<any>("");
+  const [midPointState, setMidPointState] = useState<any>("");
   const [yelpResponse, setYelpResponse] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const zipCodePattern = /^\d{5}$/
+  const zipCodePattern = /^\d{5}$/;
 
   const findMidpointButtonisDisabled = !firstCity || !secondCity;
-  const clearCitiesButtonisDisabled = !firstCity && !secondCity && !yelpResponse;
+  const clearCitiesButtonisDisabled =
+    !firstCity && !secondCity && !yelpResponse;
 
-  const handleFirstInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFirstInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setFirstInputValue(event.target.value);
-  }
+  };
 
-  const handleSecondInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSecondInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSecondInputValue(event.target.value);
-  }
+  };
 
   const handleFirstClick = async () => {
-    if(zipCodePattern.test(firstInputValue)) {
+    if (zipCodePattern.test(firstInputValue)) {
       try {
         const firstInputValNum = Number(firstInputValue);
-        setFirstCity(await getCityFromZip(firstInputValNum) || '');
+        setFirstCity((await getCityFromZip(firstInputValNum)) || "");
         setFirstLocation(firstInputValNum);
-      } catch(error) {
+      } catch (error) {
         invalidZipCodeToast();
       }
     } else {
       invalidZipCodeToast();
     }
-  }
+  };
 
   const handleSecondClick = async () => {
-    if(zipCodePattern.test(secondInputValue)) {
+    if (zipCodePattern.test(secondInputValue)) {
       const secondInputValNum = Number(secondInputValue);
       setSecondLocation(secondInputValNum);
-      setSecondCity(await getCityFromZip(secondInputValNum) || '');
+      setSecondCity((await getCityFromZip(secondInputValNum)) || "");
     } else {
       invalidZipCodeToast();
     }
-  }
+  };
 
   const handleFindMidpointClick = async () => {
-    setMidPoint(await findMidpoint(firstLocation, secondLocation))
-    setIsLoading(true)
-  }
+    setMidPoint(await findMidpoint(firstLocation, secondLocation));
+    setIsLoading(true);
+  };
 
   useEffect(() => {
-    if(midPoint) {
-      fetchNearestCity()
+    if (midPoint) {
+      fetchNearestCity();
     }
-  }, [midPoint])
+  }, [midPoint]);
 
   useEffect(() => {
-    if(midPointCity) {
-      fetchYelpData()
+    if (midPointCity) {
+      fetchYelpData();
     }
-  }, [midPointCity])
+  }, [midPointCity]);
 
   const handleClearCities = () => {
-    setFirstLocation(0)
-    setFirstCity('')
-    setFirstInputValue('')
-    setSecondLocation(0)
-    setSecondCity('')
-    setSecondInputValue('')
-    setYelpResponse(null)
-    setMidPointCity('')
-    setMidPointState('')
-  }
+    setFirstLocation(0);
+    setFirstCity("");
+    setFirstInputValue("");
+    setSecondLocation(0);
+    setSecondCity("");
+    setSecondInputValue("");
+    setYelpResponse(null);
+    setMidPointCity("");
+    setMidPointState("");
+  };
 
-  const fetchYelpData = async() => {
-    const response = await fetch(`/api/yelp?city=${midPointCity}&state=${midPointState}`)
-    const data:any = await response.json();
-    setYelpResponse(data.businesses)
-    setIsLoading(false)
-  }
+  const fetchYelpData = async () => {
+    const response = await fetch(
+      `/api/yelp?city=${midPointCity}&state=${midPointState}`
+    );
+    const data: any = await response.json();
+    setYelpResponse(data.businesses);
+    setIsLoading(false);
+  };
 
-  const fetchNearestCity = async() => {
-    const response = await fetch(`/api/rapidapi?lat=${midPoint.latitude}&lon=${midPoint.longitude}`)
-    const data:any = await response.json();
-    setMidPointCity(data.data[0].city)
-    setMidPointState(data.data[0].regionCode)
-    setIsLoading(true)
-  }
+  const fetchNearestCity = async () => {
+    const response = await fetch(
+      `/api/rapidapi?lat=${midPoint.latitude}&lon=${midPoint.longitude}`
+    );
+    const data: any = await response.json();
+    setMidPointCity(data.data[0].city);
+    setMidPointState(data.data[0].regionCode);
+    setIsLoading(true);
+  };
 
   const BusinessList = () => {
-    const first10Yelp = yelpResponse.slice(0, 10)
-    const yelpBusinesses = first10Yelp.map((biz:any) => 
-      <div className="card w-80 sm:w-96 h-96 bg-white dark:bg-zinc-800 shadow-xl mt-5 sm:mx-5 group" key={biz.index}>
-        <figure><a href={biz.url} target="_blank"><img src={biz.image_url} className="group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 ease-in-out" /></a></figure>
+    const first10Yelp = yelpResponse.slice(0, 10);
+    const yelpBusinesses = first10Yelp.map((biz: any) => (
+      <div
+        className="card w-80 sm:w-96 h-96 bg-white dark:bg-zinc-800 shadow-xl mt-5 sm:mx-5 group"
+        key={biz.index}
+      >
+        <figure>
+          <a href={biz.url} target="_blank">
+            <img
+              src={biz.image_url}
+              className="group-hover:scale-105 group-hover:drop-shadow-sm transition-all duration-200 ease-in-out"
+            />
+          </a>
+        </figure>
         <div className="card-body">
           <div className="flex items-center">
-            <a href={biz.url} target="_blank"><h2 className="card-title group-hover:underline">{biz.name}</h2></a>
+            <a href={biz.url} target="_blank">
+              <h2 className="card-title group-hover:underline">{biz.name}</h2>
+            </a>
           </div>
           <div>
             <p>{biz.location.display_address[0]}</p>
@@ -119,14 +140,18 @@ export default function Home() {
             <Rating rating={biz.rating} />
           </div>
           <div className="card-actions justify-end pt-5">
-            {biz.categories.map((category:any) => (
-              <div className="badge badge-outline" key={category.alias}>{category.title}</div>
+            {biz.categories.map((category: any) => (
+              <div className="badge badge-outline" key={category.alias}>
+                {category.title}
+              </div>
             ))}
-            {biz.price ? <div className="badge badge-accent">{biz.price}</div> : null}
+            {biz.price ? (
+              <div className="badge badge-accent">{biz.price}</div>
+            ) : null}
           </div>
         </div>
-      </div>  
-    )
+      </div>
+    ));
 
     return (
       <div className="">
@@ -134,8 +159,8 @@ export default function Home() {
           {yelpBusinesses}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <main className="bg-zinc-200 text-black dark:bg-zinc-700 dark:text-white">
@@ -148,9 +173,10 @@ export default function Home() {
             <h1 className="text-3xl py-3">midpoint</h1>
             <h3>Discover the perfect meeting point between two locations!</h3>
           </div>
+          {/* Disabled while API is down
           <div className="pt-5">
             <FindZip />
-          </div>
+          </div> */}
           <div className="flex flex-col md:flex-row pt-10">
             <div id="firstLocation" className="p-5">
               <div className="flex flex-row">
