@@ -1,30 +1,32 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import Footer from './components/Footer'
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Footer from "./components/Footer";
 import { Providers } from "./providers";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'midpoint'
-}
+  title: "midpoint",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          {children}
+          <div className="bg-zinc-200 text-black dark:bg-zinc-700 dark:text-white min-h-screen">
+            {children}
+          </div>
           <Footer />
           <Analytics />
         </Providers>
       </body>
     </html>
-  )
+  );
 }
