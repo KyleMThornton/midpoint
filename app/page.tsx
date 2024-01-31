@@ -173,10 +173,9 @@ export default function Home() {
             <h1 className="text-3xl py-3">midpoint</h1>
             <h3>Discover the perfect meeting point between two locations!</h3>
           </div>
-          {/* Disabled while API is down
           <div className="pt-5">
             <FindZip />
-          </div> */}
+          </div>
           <div className="flex flex-col md:flex-row pt-10">
             <div id="firstLocation" className="p-5">
               <div className="flex flex-row">
