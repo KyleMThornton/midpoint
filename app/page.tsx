@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useState, useMemo, useCallback, useRef } from 'react';
 import LocationInput from './components/LocationInput';
 import RestaurantCard from './components/RestaurantCard';
+import BusinessModal from './components/BusinessModal';
 import Footer from './components/Footer';
 import {
   geographicMidpoint,
@@ -116,6 +117,7 @@ export default function Home() {
   const [prices, setPrices] = useState<number[]>([1, 2, 3, 4]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [modalId, setModalId] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [animPhase, setAnimPhase] = useState<'enter' | 'exit'>('enter');
@@ -726,7 +728,7 @@ export default function Home() {
                   isSelected={selectedId === biz.id}
                   displayPhone={biz.display_phone}
                   address={biz.location.display_address}
-                  onClick={() => handleSelectRestaurant(selectedId === biz.id ? null : biz.id)}
+                  onClick={() => { handleSelectRestaurant(biz.id); setModalId(biz.id); }}
                   onDirections={(e) => {
                     e.stopPropagation();
                     const q = encodeURIComponent(biz.location.display_address.join(', '));
@@ -743,6 +745,7 @@ export default function Home() {
         </div>
       </div>
 
+      {modalId && <BusinessModal bizId={modalId} onClose={() => setModalId(null)} />}
       <Footer />
       {toast && <Toast msg={toast} />}
     </div>
