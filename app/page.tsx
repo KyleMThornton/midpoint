@@ -258,6 +258,12 @@ export default function Home() {
   ];
 
   const canSubmit = !!(locA.coords && locB.coords);
+  const canClear = !!(locA.input || locB.input);
+
+  const handleClear = () => {
+    setLocA(EMPTY_LOC);
+    setLocB(EMPTY_LOC);
+  };
 
   // ── Root wrapper styles ────────────────────────────────────────────────────
   const rootStyle: React.CSSProperties = {
@@ -367,32 +373,61 @@ export default function Home() {
               <ToggleGroup options={midToggleOpts} value={midMode} onChange={setMidMode} />
             </div>
 
-            {/* Submit */}
-            <button
-              onClick={handleSubmit}
-              disabled={!canSubmit}
-              style={{
-                marginTop: 20,
-                width: '100%',
-                padding: 16,
-                background: 'var(--accent)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 'var(--r-md)',
-                fontWeight: 700,
-                fontSize: 17,
-                fontFamily: 'inherit',
-                cursor: canSubmit ? 'pointer' : 'not-allowed',
-                opacity: canSubmit ? 1 : 0.45,
-                transition: 'filter .15s, transform .1s',
-              }}
-              onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.filter = 'brightness(1.06)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
-              onMouseDown={(e) => { if (canSubmit) e.currentTarget.style.transform = 'scale(.99)'; }}
-              onMouseUp={(e) => { e.currentTarget.style.transform = 'none'; }}
-            >
-              Find the midpoint →
-            </button>
+            {/* Submit + Clear */}
+            <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
+              <button
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                style={{
+                  flex: 1,
+                  padding: 16,
+                  background: 'var(--accent)',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 'var(--r-md)',
+                  fontWeight: 700,
+                  fontSize: 17,
+                  fontFamily: 'inherit',
+                  cursor: canSubmit ? 'pointer' : 'not-allowed',
+                  opacity: canSubmit ? 1 : 0.45,
+                  transition: 'filter .15s, transform .1s',
+                }}
+                onMouseEnter={(e) => { if (canSubmit) e.currentTarget.style.filter = 'brightness(1.06)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.filter = 'none'; }}
+                onMouseDown={(e) => { if (canSubmit) e.currentTarget.style.transform = 'scale(.99)'; }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = 'none'; }}
+              >
+                Find the midpoint →
+              </button>
+              {canClear && (
+                <button
+                  onClick={handleClear}
+                  style={{
+                    padding: '16px 20px',
+                    background: '#fff',
+                    color: '#6a5d50',
+                    border: '1.5px solid #e7ddd2',
+                    borderRadius: 'var(--r-md)',
+                    fontWeight: 600,
+                    fontSize: 15,
+                    fontFamily: 'inherit',
+                    cursor: 'pointer',
+                    transition: 'all .15s',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#c0b4a8';
+                    e.currentTarget.style.color = '#2b2018';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e7ddd2';
+                    e.currentTarget.style.color = '#6a5d50';
+                  }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Examples */}
