@@ -822,7 +822,7 @@ export default function Home() {
                     const q = encodeURIComponent(biz.location.display_address.join(', '));
                     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
                     const url = isIOS
-                      ? `https://maps.apple.com/?daddr=${q}`
+                      ? `maps://?daddr=${q}`
                       : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
                     window.open(url, '_blank');
                   }}
