@@ -173,7 +173,8 @@ export default function Home() {
         geoData.address?.town ||
         geoData.address?.village ||
         geoData.address?.suburb ||
-        geoData.display_name?.split(',')[0] ||
+        geoData.address?.county ||
+        geoData.display_name?.split(',').map((p: string) => p.trim()).find((p: string) => !/^\d+$/.test(p)) ||
         'the midpoint'
       );
       if (weatherData.temp !== undefined) {
