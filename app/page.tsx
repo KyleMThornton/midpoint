@@ -169,10 +169,10 @@ export default function Home() {
       ]);
       const [geoData, weatherData] = await Promise.all([geoRes.json(), weatherRes.json()]);
       setNeighborhood(
-        geoData.address?.suburb ||
-        geoData.address?.city_district ||
         geoData.address?.city ||
         geoData.address?.town ||
+        geoData.address?.village ||
+        geoData.address?.suburb ||
         geoData.display_name?.split(',')[0] ||
         'the midpoint'
       );
