@@ -418,7 +418,13 @@ export default function Home() {
               >
                 Find the midpoint →
               </button>
-              {canClear && (
+              <div style={{
+                overflow: 'hidden',
+                maxWidth: canClear ? 160 : 0,
+                opacity: canClear ? 1 : 0,
+                flexShrink: 0,
+                transition: 'max-width .2s ease, opacity .18s ease',
+              }}>
                 <button
                   onClick={handleClear}
                   style={{
@@ -431,8 +437,8 @@ export default function Home() {
                     fontSize: 15,
                     fontFamily: 'inherit',
                     cursor: 'pointer',
-                    transition: 'all .15s',
-                    flexShrink: 0,
+                    whiteSpace: 'nowrap',
+                    transition: 'border-color .15s, color .15s',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#c0b4a8';
@@ -445,7 +451,7 @@ export default function Home() {
                 >
                   Clear
                 </button>
-              )}
+              </div>
             </div>
           </div>
 
