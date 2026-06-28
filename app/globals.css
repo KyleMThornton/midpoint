@@ -49,6 +49,40 @@ input::placeholder {
   to   { opacity: 1; transform: translate(-50%, 0); }
 }
 
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Input screen: stack location inputs with swap button centered between */
+  .mp-inputs-row > div {
+    flex: none !important;
+    width: 100%;
+  }
+  .mp-inputs-row > button {
+    margin: 2px auto;
+  }
+
+  /* Results header: logo + "New search" on one line, breadcrumb below */
+  .mp-breadcrumb {
+    order: 3;
+    flex: none !important;
+    min-width: 0 !important;
+    width: 100%;
+    justify-content: flex-start !important;
+    font-size: 12.5px !important;
+  }
+  .mp-new-search {
+    margin-left: auto;
+  }
+
+  /* Results grid: map not sticky when stacked */
+  .mp-map-col {
+    position: static !important;
+    min-width: 0 !important;
+  }
+  .mp-list-col {
+    min-width: 0 !important;
+  }
+}
+
 /* Leaflet overrides — keep controls readable on the warm palette */
 .leaflet-control-zoom a {
   color: #4a4035 !important;

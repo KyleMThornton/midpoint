@@ -334,7 +334,7 @@ export default function Home() {
             padding: 'clamp(18px, 3vw, 28px)',
           }}>
             {/* Location inputs */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: 12 }}>
+            <div className="mp-inputs-row" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: 12 }}>
               <LocationInput
                 value={locA.input}
                 onChange={(v) => setLocA({ input: v, name: v, coords: null })}
@@ -503,7 +503,7 @@ export default function Home() {
       >
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 20 }}>
+        <div className="mp-results-header" style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 20 }}>
           <button
             onClick={() => navigateTo('input')}
             style={{
@@ -521,7 +521,7 @@ export default function Home() {
             mid<span style={{ color: 'var(--accent)' }}>point</span>
           </button>
 
-          <div style={{ flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, flexWrap: 'wrap', fontSize: 13.5, color: '#6a5d50' }}>
+          <div className="mp-breadcrumb" style={{ flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, flexWrap: 'wrap', fontSize: 13.5, color: '#6a5d50' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, maxWidth: '30ch', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5a7a22', flexShrink: 0 }} />
               {locA.name}
@@ -539,6 +539,7 @@ export default function Home() {
           </div>
 
           <button
+            className="mp-new-search"
             onClick={() => navigateTo('input')}
             style={{
               padding: '9px 16px',
@@ -563,10 +564,10 @@ export default function Home() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start' }}>
+        <div className="mp-results-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start' }}>
 
           {/* ── Left column: map ──────────────────────────────────────────── */}
-          <div style={{ flex: '1 1 380px', minWidth: 300, position: 'sticky', top: 16 }}>
+          <div className="mp-map-col" style={{ flex: '1 1 380px', minWidth: 300, position: 'sticky', top: 16 }}>
             <div style={{ marginBottom: 14 }}>
               <ToggleGroup options={midToggleOpts} value={midMode} onChange={setMidMode} />
             </div>
@@ -611,7 +612,7 @@ export default function Home() {
           </div>
 
           {/* ── Right column: restaurant list ─────────────────────────────── */}
-          <div style={{ flex: '2 1 460px', minWidth: 320 }}>
+          <div className="mp-list-col" style={{ flex: '2 1 460px', minWidth: 320 }}>
 
             {/* Sort tabs */}
             <div style={{ marginBottom: 12 }}>
