@@ -5,7 +5,6 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import LocationInput from './components/LocationInput';
 import RestaurantCard from './components/RestaurantCard';
 import BusinessModal from './components/BusinessModal';
-import Footer from './components/Footer';
 import {
   geographicMidpoint,
   fairMidpoint,
@@ -528,7 +527,6 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <Footer />
         {toast && <Toast msg={toast} />}
       </div>
     );
@@ -838,7 +836,6 @@ export default function Home() {
       </div>
 
       {modalId && <BusinessModal bizId={modalId} onClose={() => setModalId(null)} />}
-      <Footer />
       {toast && <Toast msg={toast} />}
     </div>
   );
