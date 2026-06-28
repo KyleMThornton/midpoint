@@ -322,7 +322,7 @@ export default function Home() {
                 onSelect={(name, lat, lon) => setLocA({ input: name, name, coords: { lat, lon } })}
                 placeholder="City, address, or ZIP"
                 label="You"
-                dotColor="#e0654a"
+                dotColor="#5a7a22"
               />
 
               <button
@@ -495,7 +495,7 @@ export default function Home() {
 
           <div style={{ flex: 1, minWidth: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9, flexWrap: 'wrap', fontSize: 13.5, color: '#6a5d50' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, maxWidth: '30ch', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e0654a', flexShrink: 0 }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5a7a22', flexShrink: 0 }} />
               {locA.name}
             </span>
             <span style={{ color: '#c4b8a8' }}>→</span>
@@ -572,7 +572,7 @@ export default function Home() {
                 {midMode === 'geo' ? 'Geographic halfway point' : 'Balanced for travel time'}
               </div>
               <div style={{ padding: '8px 13px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', color: '#4a4035', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#e0654a' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#5a7a22' }} />
                 You ~{youMin} min
               </div>
               <div style={{ padding: '8px 13px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', color: '#4a4035', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", display: 'flex', alignItems: 'center', gap: 6 }}>

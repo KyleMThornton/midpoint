@@ -155,7 +155,7 @@ export default function RestaurantCard({
 
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '7px 14px', fontSize: 12.5, color: '#6a5d50' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#e0654a' }} />
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5a7a22' }} />
             You <b style={{ color: '#2b2018' }}>{distAMi.toFixed(1)} mi</b>
           </span>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>

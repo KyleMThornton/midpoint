@@ -20,9 +20,9 @@ interface Props {
   onSelect: (id: string | null) => void;
 }
 
-const ACCENT = '#d6552f';
+const ACCENT = '#5a7a22';
 const TEAL = '#2f9c8e';
-const RED = '#e0654a';
+const RED = '#5a7a22';
 
 function makeMarkerIcon(label: string, bg: string, size: number) {
   return L.divIcon({
