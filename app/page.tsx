@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import LocationInput from './components/LocationInput';
 import RestaurantCard from './components/RestaurantCard';
 import BusinessModal from './components/BusinessModal';
@@ -116,6 +116,9 @@ export default function Home() {
   const [openOnly, setOpenOnly] = useState(false);
   const [prices, setPrices] = useState<number[]>([1, 2, 3, 4]);
   const [minRating, setMinRating] = useState(0);
+  const [midWeather, setMidWeather] = useState<{ temp: number; weatherCode: number } | null>(null);
+  const [midTimezone, setMidTimezone] = useState('');
+  const [now, setNow] = useState(() => new Date());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [modalId, setModalId] = useState<string | null>(null);
@@ -123,6 +126,11 @@ export default function Home() {
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const [animPhase, setAnimPhase] = useState<'enter' | 'exit'>('enter');
   const pendingNavRef = useRef<Screen | null>(null);
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const midpoint = useMemo<Coords | null>(() => {
     if (!locA.coords || !locB.coords) return null;
@@ -155,13 +163,18 @@ export default function Home() {
     setIsLoading(true);
     setBusinesses([]);
     setSelectedId(null);
+    setMidWeather(null);
+    setMidTimezone('');
 
     try {
-      const [yelpRes, geoRes] = await Promise.all([
+      const [yelpRes, geoRes, weatherRes] = await Promise.all([
         fetch(`/api/yelp?lat=${mid.lat}&lon=${mid.lon}`),
         fetch(`/api/reverse?lat=${mid.lat}&lon=${mid.lon}`),
+        fetch(`/api/weather?lat=${mid.lat}&lon=${mid.lon}`),
       ]);
-      const [yelpData, geoData] = await Promise.all([yelpRes.json(), geoRes.json()]);
+      const [yelpData, geoData, weatherData] = await Promise.all([
+        yelpRes.json(), geoRes.json(), weatherRes.json(),
+      ]);
       setBusinesses(yelpData.businesses ?? []);
       setNeighborhood(
         geoData.address?.suburb ||
@@ -171,6 +184,10 @@ export default function Home() {
         geoData.display_name?.split(',')[0] ||
         'the midpoint'
       );
+      if (weatherData.temp !== undefined) {
+        setMidWeather({ temp: weatherData.temp, weatherCode: weatherData.weatherCode });
+        setMidTimezone(weatherData.timezone ?? '');
+      }
     } catch {
       showToast('Could not load results — check your connection.');
     } finally {
@@ -267,6 +284,11 @@ export default function Home() {
 
   const youMin  = midpoint && locA.coords ? estimateDriveMinutes(locA.coords, midpoint) : 0;
   const themMin = midpoint && locB.coords ? estimateDriveMinutes(locB.coords, midpoint) : 0;
+  const distAMi = midpoint && locA.coords ? haversineMi(locA.coords, midpoint) : null;
+  const distBMi = midpoint && locB.coords ? haversineMi(locB.coords, midpoint) : null;
+  const localTimeStr = midTimezone
+    ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: midTimezone }).format(now)
+    : null;
 
   const midToggleOpts: { value: MidMode; label: string; sub: string }[] = [
     { value: 'fair', label: 'Fair drive-time', sub: 'Equal travel' },
@@ -574,6 +596,45 @@ export default function Home() {
 
           {/* ── Left column: map ──────────────────────────────────────────── */}
           <div className="mp-map-col" style={{ flex: '1 1 380px', minWidth: 300, position: 'sticky', top: 16 }}>
+
+            {/* Midpoint city title */}
+            <div style={{ marginBottom: 16 }}>
+              <div style={{
+                fontFamily: "var(--font-bricolage, 'Bricolage Grotesque', sans-serif)",
+                fontWeight: 800,
+                fontSize: 'clamp(20px, 3.5vw, 26px)',
+                letterSpacing: '-0.03em',
+                color: '#2b2018',
+                marginBottom: 10,
+              }}>
+                {neighborhood || '—'}
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                {distAMi !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 11px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", color: '#4a4035' }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5a7a22', flexShrink: 0 }} />
+                    {distAMi.toFixed(1)} mi from you
+                  </div>
+                )}
+                {distBMi !== null && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 11px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", color: '#4a4035' }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2f9c8e', flexShrink: 0 }} />
+                    {distBMi.toFixed(1)} mi from them
+                  </div>
+                )}
+                {midWeather && (
+                  <div style={{ padding: '6px 11px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", color: '#4a4035' }}>
+                    {weatherEmoji(midWeather.weatherCode)} {midWeather.temp}°F
+                  </div>
+                )}
+                {localTimeStr && (
+                  <div style={{ padding: '6px 11px', borderRadius: 999, background: '#fff', border: '1px solid #efe7dd', font: "600 12px var(--font-dm-sans, 'DM Sans', sans-serif)", color: '#4a4035' }}>
+                    🕐 {localTimeStr}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div style={{ marginBottom: 14 }}>
               <ToggleGroup options={midToggleOpts} value={midMode} onChange={setMidMode} />
             </div>
@@ -766,6 +827,19 @@ export default function Home() {
 }
 
 // ─── Small helpers ────────────────────────────────────────────────────────────
+
+function weatherEmoji(code: number): string {
+  if (code === 0)          return '☀️';
+  if (code <= 2)           return '⛅';
+  if (code === 3)          return '☁️';
+  if (code <= 48)          return '🌫️';
+  if (code <= 57)          return '🌦️';
+  if (code <= 67)          return '🌧️';
+  if (code <= 77)          return '🌨️';
+  if (code <= 82)          return '🌦️';
+  if (code <= 86)          return '🌨️';
+  return '⛈️';
+}
 
 function SkeletonCard() {
   const skel: React.CSSProperties = {
