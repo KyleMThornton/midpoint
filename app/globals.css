@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --accent: #d6552f;
+  --accent-soft: #fbe8df;
+  --r-lg: 22px;
+  --r-md: 16px;
+  --r-sm: 11px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+input::placeholder {
+  color: #b3a89b;
+}
+
+@keyframes mpUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes mpPop {
+  0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+  60%  { transform: translate(-50%, -50%) scale(1.18); }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes mpToast {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Leaflet overrides — keep controls readable on the warm palette */
+.leaflet-control-zoom a {
+  color: #4a4035 !important;
+}
+.leaflet-bar {
+  border-color: #e7ddd2 !important;
+  box-shadow: 0 2px 8px rgba(80, 50, 20, 0.15) !important;
+}
