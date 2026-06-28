@@ -159,23 +159,16 @@ export default function Home() {
     }
   }, []);
 
-  const fetchResults = useCallback(async (mid: Coords) => {
-    setIsLoading(true);
-    setBusinesses([]);
-    setSelectedId(null);
+  const fetchMidpointInfo = useCallback(async (mid: Coords) => {
+    setNeighborhood('');
     setMidWeather(null);
     setMidTimezone('');
-
     try {
-      const [yelpRes, geoRes, weatherRes] = await Promise.all([
-        fetch(`/api/yelp?lat=${mid.lat}&lon=${mid.lon}`),
+      const [geoRes, weatherRes] = await Promise.all([
         fetch(`/api/reverse?lat=${mid.lat}&lon=${mid.lon}`),
         fetch(`/api/weather?lat=${mid.lat}&lon=${mid.lon}`),
       ]);
-      const [yelpData, geoData, weatherData] = await Promise.all([
-        yelpRes.json(), geoRes.json(), weatherRes.json(),
-      ]);
-      setBusinesses(yelpData.businesses ?? []);
+      const [geoData, weatherData] = await Promise.all([geoRes.json(), weatherRes.json()]);
       setNeighborhood(
         geoData.address?.suburb ||
         geoData.address?.city_district ||
@@ -188,6 +181,25 @@ export default function Home() {
         setMidWeather({ temp: weatherData.temp, weatherCode: weatherData.weatherCode });
         setMidTimezone(weatherData.timezone ?? '');
       }
+    } catch {
+      // non-critical — title will stay blank
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!midpoint || screen !== 'results') return;
+    fetchMidpointInfo(midpoint);
+  }, [midpoint, screen, fetchMidpointInfo]);
+
+  const fetchResults = useCallback(async (mid: Coords) => {
+    setIsLoading(true);
+    setBusinesses([]);
+    setSelectedId(null);
+
+    try {
+      const res = await fetch(`/api/yelp?lat=${mid.lat}&lon=${mid.lon}`);
+      const data = await res.json();
+      setBusinesses(data.businesses ?? []);
     } catch {
       showToast('Could not load results — check your connection.');
     } finally {
