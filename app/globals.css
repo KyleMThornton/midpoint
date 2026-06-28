@@ -33,6 +33,11 @@ input::placeholder {
   to   { opacity: 0; transform: translateY(-8px); }
 }
 
+@keyframes mpShimmer {
+  from { background-position: -600px 0; }
+  to   { background-position: 600px 0; }
+}
+
 @keyframes mpPop {
   0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
   60%  { transform: translate(-50%, -50%) scale(1.18); }

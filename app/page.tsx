@@ -661,9 +661,8 @@ export default function Home() {
 
             {/* Loading */}
             {isLoading && (
-              <div style={{ textAlign: 'center', padding: '60px 20px', color: '#9a8c7e', fontSize: 14 }}>
-                <div style={{ marginBottom: 12, fontSize: 28 }}>★</div>
-                Finding restaurants near the midpoint…
+              <div>
+                {[...Array(5)].map((_, i) => <SkeletonCard key={i} />)}
               </div>
             )}
 
@@ -744,6 +743,33 @@ export default function Home() {
 }
 
 // ─── Small helpers ────────────────────────────────────────────────────────────
+
+function SkeletonCard() {
+  const skel: React.CSSProperties = {
+    background: 'linear-gradient(90deg, #f0e9e1 25%, #e6ddd4 50%, #f0e9e1 75%)',
+    backgroundSize: '600px 100%',
+    animation: 'mpShimmer 1.4s ease-in-out infinite',
+    borderRadius: 6,
+  };
+  return (
+    <div style={{ display: 'flex', gap: 14, padding: 14, background: '#fff', border: '1.5px solid #efe7dd', borderRadius: 'var(--r-md)', marginBottom: 12 }}>
+      <div style={{ ...skel, flexShrink: 0, width: 100, height: 100, borderRadius: 'var(--r-sm)' }} />
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+          <div style={{ ...skel, height: 19, width: '52%' }} />
+          <div style={{ ...skel, height: 22, width: 68, borderRadius: 999, flexShrink: 0 }} />
+        </div>
+        <div style={{ ...skel, height: 13, width: '38%', marginTop: 9 }} />
+        <div style={{ ...skel, height: 13, width: '48%', marginTop: 9 }} />
+        <div style={{ ...skel, height: 12, width: '62%', marginTop: 9 }} />
+        <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+          <div style={{ ...skel, height: 31, width: 88, borderRadius: 999 }} />
+          <div style={{ ...skel, height: 31, width: 58, borderRadius: 999 }} />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
