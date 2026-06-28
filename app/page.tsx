@@ -118,6 +118,8 @@ export default function Home() {
   const [toast, setToast] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [animPhase, setAnimPhase] = useState<'enter' | 'exit'>('enter');
+  const pendingNavRef = useRef<Screen | null>(null);
 
   const midpoint = useMemo<Coords | null>(() => {
     if (!locA.coords || !locB.coords) return null;
@@ -130,6 +132,20 @@ export default function Home() {
     setToast(msg);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(null), 2200);
+  }, []);
+
+  const navigateTo = useCallback((to: Screen) => {
+    pendingNavRef.current = to;
+    setAnimPhase('exit');
+  }, []);
+
+  const handleNavAnimEnd = useCallback((e: React.AnimationEvent<HTMLDivElement>) => {
+    if (e.animationName !== 'mpExit') return;
+    if (pendingNavRef.current) {
+      setScreen(pendingNavRef.current);
+      pendingNavRef.current = null;
+      setAnimPhase('enter');
+    }
   }, []);
 
   const fetchResults = useCallback(async (mid: Coords) => {
@@ -161,10 +177,10 @@ export default function Home() {
 
   const handleSubmit = async () => {
     if (!midpoint) return;
-    setScreen('results');
     setSort('mid');
     setOpenOnly(false);
     setPrices([1, 2, 3, 4]);
+    navigateTo('results');
     await fetchResults(midpoint);
   };
 
@@ -173,13 +189,13 @@ export default function Home() {
     const newLocB: LocationData = { input: ex.b.name, name: ex.b.name, coords: ex.b.coords };
     setLocA(newLocA);
     setLocB(newLocB);
-    setScreen('results');
     setSort('mid');
     setOpenOnly(false);
     setPrices([1, 2, 3, 4]);
     const mid = midMode === 'geo'
       ? geographicMidpoint(ex.a.coords, ex.b.coords)
       : fairMidpoint(ex.a.coords, ex.b.coords);
+    navigateTo('results');
     await fetchResults(mid);
   };
 
@@ -279,16 +295,19 @@ export default function Home() {
   if (screen === 'input') {
     return (
       <div style={rootStyle}>
-        <div style={{
-          maxWidth: 780,
-          margin: '0 auto',
-          padding: 'max(5vh, 36px) 22px 70px',
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          animation: 'mpUp .45s ease both',
-        }}>
+        <div
+          style={{
+            maxWidth: 780,
+            margin: '0 auto',
+            padding: 'max(5vh, 36px) 22px 70px',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            animation: animPhase === 'enter' ? 'mpUp .22s ease both' : 'mpExit .15s ease both',
+          }}
+          onAnimationEnd={handleNavAnimEnd}
+        >
           {/* Logo + tagline */}
           <div style={{ textAlign: 'center', marginBottom: 30 }}>
             <div style={{
@@ -472,12 +491,15 @@ export default function Home() {
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div style={rootStyle}>
-      <div style={{ maxWidth: 1220, margin: '0 auto', padding: '18px 20px 70px', animation: 'mpUp .4s ease both' }}>
+      <div
+        style={{ maxWidth: 1220, margin: '0 auto', padding: '18px 20px 70px', animation: animPhase === 'enter' ? 'mpUp .2s ease both' : 'mpExit .15s ease both' }}
+        onAnimationEnd={handleNavAnimEnd}
+      >
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', marginBottom: 20 }}>
           <button
-            onClick={() => setScreen('input')}
+            onClick={() => navigateTo('input')}
             style={{
               fontFamily: "var(--font-bricolage, 'Bricolage Grotesque', sans-serif)",
               fontWeight: 800,
@@ -511,7 +533,7 @@ export default function Home() {
           </div>
 
           <button
-            onClick={() => setScreen('input')}
+            onClick={() => navigateTo('input')}
             style={{
               padding: '9px 16px',
               borderRadius: 999,
