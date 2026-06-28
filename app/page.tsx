@@ -806,7 +806,11 @@ export default function Home() {
                   onDirections={(e) => {
                     e.stopPropagation();
                     const q = encodeURIComponent(biz.location.display_address.join(', '));
-                    window.open(`https://www.google.com/maps/dir/?api=1&destination=${q}`, '_blank');
+                    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                    const url = isIOS
+                      ? `https://maps.apple.com/?daddr=${q}`
+                      : `https://www.google.com/maps/dir/?api=1&destination=${q}`;
+                    window.open(url, '_blank');
                   }}
                   onCall={(e) => {
                     e.stopPropagation();
