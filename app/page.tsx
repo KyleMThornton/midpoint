@@ -115,6 +115,7 @@ export default function Home() {
   const [sort, setSort] = useState<SortMode>('mid');
   const [openOnly, setOpenOnly] = useState(false);
   const [prices, setPrices] = useState<number[]>([1, 2, 3, 4]);
+  const [minRating, setMinRating] = useState(0);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [modalId, setModalId] = useState<string | null>(null);
@@ -182,6 +183,7 @@ export default function Home() {
     setSort('mid');
     setOpenOnly(false);
     setPrices([1, 2, 3, 4]);
+    setMinRating(0);
     navigateTo('results');
     await fetchResults(midpoint);
   };
@@ -194,6 +196,7 @@ export default function Home() {
     setSort('mid');
     setOpenOnly(false);
     setPrices([1, 2, 3, 4]);
+    setMinRating(0);
     const mid = midMode === 'geo'
       ? geographicMidpoint(ex.a.coords, ex.b.coords)
       : fairMidpoint(ex.a.coords, ex.b.coords);
@@ -231,6 +234,7 @@ export default function Home() {
         if (openOnly && b.is_closed) return false;
         const level = b.price?.length ?? 0;
         if (level > 0 && !prices.includes(level)) return false;
+        if (minRating > 0 && b.rating < minRating) return false;
         return true;
       })
       .map((b) => {
@@ -248,7 +252,7 @@ export default function Home() {
           case 'price':  return (a.price?.length ?? 0) - (b.price?.length ?? 0);
         }
       });
-  }, [businesses, locA.coords, locB.coords, midpoint, sort, openOnly, prices]);
+  }, [businesses, locA.coords, locB.coords, midpoint, sort, openOnly, prices, minRating]);
 
   const restaurantPins = useMemo(
     () =>
@@ -663,6 +667,15 @@ export default function Home() {
                   onClick={() => togglePrice(l)}
                 />
               ))}
+              <span style={{ width: 1, height: 18, background: '#e7ddd2' }} />
+              {[3, 3.5, 4, 4.5].map((r) => (
+                <FilterChip
+                  key={r}
+                  label={`${r}★+`}
+                  active={minRating === r}
+                  onClick={() => setMinRating((v) => (v === r ? 0 : r))}
+                />
+              ))}
               <span style={{ marginLeft: 'auto', fontSize: 12.5, color: '#9a8c7e' }}>
                 {enriched.length} place{enriched.length !== 1 ? 's' : ''}
               </span>
@@ -685,7 +698,7 @@ export default function Home() {
                 borderRadius: 'var(--r-lg)',
                 color: '#9a8c7e',
               }}>
-                No spots match those filters. Try widening your price or open-now filters.
+                No spots match those filters. Try widening your price, rating, or open-now filters.
               </div>
             )}
 
