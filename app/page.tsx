@@ -118,6 +118,7 @@ export default function Home() {
   const [minRating, setMinRating] = useState(0);
   const [midWeather, setMidWeather] = useState<{ temp: number; weatherCode: number } | null>(null);
   const [midTimezone, setMidTimezone] = useState('');
+  const [infoVisible, setInfoVisible] = useState(true);
   const [now, setNow] = useState(() => new Date());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -160,9 +161,7 @@ export default function Home() {
   }, []);
 
   const fetchMidpointInfo = useCallback(async (mid: Coords) => {
-    setNeighborhood('');
-    setMidWeather(null);
-    setMidTimezone('');
+    setInfoVisible(false);
     try {
       const [geoRes, weatherRes] = await Promise.all([
         fetch(`/api/reverse?lat=${mid.lat}&lon=${mid.lon}`),
@@ -183,6 +182,8 @@ export default function Home() {
       }
     } catch {
       // non-critical — title will stay blank
+    } finally {
+      setInfoVisible(true);
     }
   }, []);
 
@@ -610,7 +611,7 @@ export default function Home() {
           <div className="mp-map-col" style={{ flex: '1 1 380px', minWidth: 300, position: 'sticky', top: 16 }}>
 
             {/* Midpoint city title */}
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 16, opacity: infoVisible ? 1 : 0, transition: 'opacity 0.18s ease' }}>
               <div style={{
                 fontFamily: "var(--font-bricolage, 'Bricolage Grotesque', sans-serif)",
                 fontWeight: 800,
