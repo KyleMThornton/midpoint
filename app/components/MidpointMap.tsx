@@ -63,7 +63,7 @@ export default function MidpointMap({ locationA, locationB, midpoint, restaurant
     });
     mapRef.current = map;
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    L.tileLayer(`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=${process.env.NEXT_PUBLIC_CARTO_API_KEY}`, {
       attribution:
         '© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors ' +
         '© <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
